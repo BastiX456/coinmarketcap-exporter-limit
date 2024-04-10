@@ -28,9 +28,11 @@ cak = os.environ.get('COINMARKETCAP_API_KEY')
 # Note the api limits: https://pro.coinmarketcap.com/features
 # cache_ttl = int(os.environ.get('CACHE_TTL', 10200)) # Original
 # caching API for every 60 min
-cache_ttl = int(os.environ.get('CACHE_TTL', 3600))
+#cache_ttl = int(os.environ.get('CACHE_TTL', 3600))
+cache_ttl = int(os.environ.get('CACHE_TTL', 5400)) #10.04.2024
 #cache_max_size = int(os.environ.get('CACHE_MAX_SIZE', 10000)) # Original
-cache_max_size = int(os.environ.get('CACHE_MAX_SIZE', 2000))
+#cache_max_size = int(os.environ.get('CACHE_MAX_SIZE', 2000))
+cache_max_size = int(os.environ.get('CACHE_MAX_SIZE', 3000)) #10.04.2024
 cache = TTLCache(maxsize=cache_max_size, ttl=cache_ttl)
 
 class CoinClient():
