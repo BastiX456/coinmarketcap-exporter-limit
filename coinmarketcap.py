@@ -24,6 +24,9 @@ log.addHandler(ch)
 
 currency = os.environ.get('CURRENCY', 'USD')
 cak = os.environ.get('COINMARKETCAP_API_KEY')
+# Angeblich bis zu 200(100 davor.. sicher!) Aufrufe Pro Credit (10000 Credits/Monat)
+# -> bei 1600 Werten -> max Aufrufe = (10000*100 / 1600) / 30 Tage -> 20.8 am Tag
+# -> Annahme Jede Minuten -> Limit_max = (10000 *100 / 46100 (ca. jede Minute im Monat)) -> 21,6 
 # caching API for 170min (every 3 hours)
 # Note the api limits: https://pro.coinmarketcap.com/features
 # cache_ttl = int(os.environ.get('CACHE_TTL', 10200)) # Original
@@ -33,7 +36,9 @@ cache_ttl = int(os.environ.get('CACHE_TTL', 7200)) #14.04.2024
 #cache_max_size = int(os.environ.get('CACHE_MAX_SIZE', 10000)) # Original
 #cache_max_size = int(os.environ.get('CACHE_MAX_SIZE', 2000))
 cache_max_size = int(os.environ.get('CACHE_MAX_SIZE', 4000)) #14.04.2024
+limit_max = int(os.environ.get('LIMIT_MAX', 1600)) #10.11.2024 Limit der Max. Werte
 cache = TTLCache(maxsize=cache_max_size, ttl=cache_ttl)
+
 
 class CoinClient():
   def __init__(self):
@@ -42,7 +47,8 @@ class CoinClient():
     self.headers = {'Accepts': 'application/json', 'X-CMC_PRO_API_KEY': cak}
     #self.parameters = {'start': '1', 'limit': '5000', 'convert': currency} # original
     #self.parameters = {'start': '1', 'limit': '1600', 'convert': currency}
-    self.parameters = {'start': '1', 'limit': '1600', 'convert': currency} #14.04.2024
+    #self.parameters = {'start': '1', 'limit': '1600', 'convert': currency} #14.04.2024
+    self.parameters = {'start': '1', 'limit': limit_max, 'convert': currency} #14.04.2024
 
   @cached(cache)
   def tickers(self):
