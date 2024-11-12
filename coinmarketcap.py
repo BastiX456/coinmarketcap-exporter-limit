@@ -40,6 +40,7 @@ limit_max = int(os.environ.get('LIMIT_MAX', 1600)) #10.11.2024 Limit der Max. We
 debug = int(os.environ.get('DEBUG', 0)) #10.11.2024
 mode = int(os.environ.get('MODE', 1)) #10.11.2024
 symbol = os.environ.get('SYMBOL', 'BTC') #10.11.2024
+symbol2 = os.environ.get('SYMBOL2', 'BTC') #10.11.2024
 cache = TTLCache(maxsize=cache_max_size, ttl=cache_ttl)
 
 
@@ -100,7 +101,7 @@ class CoinCollector():
         if mode == 2: 
           for value in response['data']:  #jeder Hauptdatensatz. (BTC, ETH, ...) ist doppelt geschachtelt!
             log.info('Test1: ' + str(value)) ##########
-            for that0 in [symbol]: # z.B. BTC oder ETC
+            for that0 in [symbol2]: # z.B. BTC oder ETC
                 log.info('Test2: ' + str(that0)) ##########
                 for that in ['cmc_rank', 'total_supply', 'max_supply', 'circulating_supply']:
                   coinmarketmetric = '_'.join(['coin_market', that])
