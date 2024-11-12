@@ -103,17 +103,19 @@ class CoinCollector():
             log.info('Test1: ' + str(value)) ##########
             for that0 in [symbol2]: # z.B. BTC oder ETC
                 log.info('Test2: ' + str(that0)) ##########
+                log.info('Test3: ' + str(value[that0])) ##########
+                log.info('Test4: ' + str(value[that0][that])) ##########
                 for that in ['cmc_rank', 'total_supply', 'max_supply', 'circulating_supply']:
+                  log.info('Test5: ' + str(value[that0])) ##########
                   coinmarketmetric = '_'.join(['coin_market', that])
-                  if value[that] is not None:
-                    log.info('Test3: ' + str(value[that])) ##########
+                  if value[that0][that] is not None:
                     metric.add_sample(coinmarketmetric, value=float(value[that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
                 for price in [currency]:
                   for that in ['price', 'volume_24h', 'market_cap', 'percent_change_1h', 'percent_change_24h', 'percent_change_7d']:
                     coinmarketmetric = '_'.join(['coin_market', that, price]).lower()
                     if value['quote'][price] is None:
                       continue
-                    if value['quote'][price][that] is not None:
+                    if value['quote'][price][that0][that] is not None:
                       metric.add_sample(coinmarketmetric, value=float(value['quote'][price][that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
         
         #alter Code für Standard abfragen
