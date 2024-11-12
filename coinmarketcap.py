@@ -37,15 +37,10 @@ cache_ttl = int(os.environ.get('CACHE_TTL', 7200)) #14.04.2024
 #cache_max_size = int(os.environ.get('CACHE_MAX_SIZE', 2000))
 cache_max_size = int(os.environ.get('CACHE_MAX_SIZE', 4000)) #14.04.2024
 limit_max = int(os.environ.get('LIMIT_MAX', 1600)) #10.11.2024 Limit der Max. Werte
+debug = int(os.environ.get('DEBUG', 0)) #10.11.2024
 mode = int(os.environ.get('MODE', 1)) #10.11.2024
 symbol = int(os.environ.get('SYMBOL', BTC)) #10.11.2024
 cache = TTLCache(maxsize=cache_max_size, ttl=cache_ttl)
-log.info('CURRENCY: ' + currency)
-log.info('CACHE_TTL: ' + cache_ttl)
-log.info('CACHE_MAX_SIZE: ' + cache_max_size)
-log.info('LIMIT_MAX: ' + limit_max)
-log.info('MODE: ' + mode)
-log.info('SYMBOL: ' + symbol)
 
 
 class CoinClient():
@@ -54,14 +49,12 @@ class CoinClient():
     self.headers = {'Accepts': 'application/json', 'X-CMC_PRO_API_KEY': cak}
     
     if mode == '1'
-      log.info('Mode=1')
       self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
       self.parameters = {'start': '1', 'limit': limit_max, 'convert': currency} #10.11.2024
       #self.parameters = {'start': '1', 'limit': '5000', 'convert': currency} # original
       #self.parameters = {'start': '1', 'limit': '1600', 'convert': currency}
       #self.parameters = {'start': '1', 'limit': '1600', 'convert': currency} #14.04.2024
     else
-      log.info('Mode=2')
       self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
       self.parameters = {'symbol': symbol, 'convert': currency} #10.11.2024
     
@@ -85,6 +78,15 @@ class CoinCollector():
   def collect(self):
     with lock:
       log.info('collecting...')
+
+      if debug == '1'
+        log.info('CURRENCY: ' + currency)
+        log.info('CACHE_TTL: ' + cache_ttl)
+        log.info('CACHE_MAX_SIZE: ' + cache_max_size)
+        log.info('LIMIT_MAX: ' + limit_max)
+        log.info('MODE: ' + mode)
+        log.info('SYMBOL: ' + symbol)
+      
       # query the api
       response = self.client.tickers()
       metric = Metric('coin_market', 'coinmarketcap metric values', 'gauge')
