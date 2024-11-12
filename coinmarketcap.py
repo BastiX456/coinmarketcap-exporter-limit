@@ -104,10 +104,10 @@ class CoinCollector():
         #Neuer Code für individuelle Abfragen
         if mode == 3: 
           
-          #for symbol_data in response['data'].values():
-            #log.info('Test1: ' + str(symbol_data))
-          for value in response['data']:  #jeder Hauptdatensatz. (BTC, ETH, ...) ist doppelt geschachtelt!
-            log.info('Test1: ' + str(value)) ##########
+          for value in response['data'].values():
+            log.info('Test1: ' + str(value))
+          #for value in response['data']:  #jeder Hauptdatensatz. (BTC, ETH, ...) ist doppelt geschachtelt!
+            #log.info('Test1: ' + str(value)) ##########
             for that0 in [symbol2]: # z.B. BTC oder ETC
                 log.info('Test2: ' + str(that0)) ########## = BTC
                 #log.info('Test22: ' + str(that0.items())) ##########
