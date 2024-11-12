@@ -78,14 +78,15 @@ class CoinCollector():
   def collect(self):
     with lock:
       log.info('collecting... in Mode:' + str(mode))
-
-      if debug == '1':
-        log.info('CURRENCY: ' + currency)
-        log.info('CACHE_TTL: ' + str(cache_ttl))
-        log.info('CACHE_MAX_SIZE: ' + str(cache_max_size))
-        log.info('LIMIT_MAX: ' + str(limit_max))
-        log.info('MODE: ' + str(mode))
-        log.info('SYMBOL: ' + symbol)
+      log.info('DEBUG: ' + debug)
+      
+      #if debug == '1':
+      log.info('CURRENCY: ' + currency)
+      log.info('CACHE_TTL: ' + str(cache_ttl))
+      log.info('CACHE_MAX_SIZE: ' + str(cache_max_size))
+      log.info('LIMIT_MAX: ' + str(limit_max))
+      log.info('MODE: ' + str(mode))
+      log.info('SYMBOL: ' + symbol)
       
       # query the api
       response = self.client.tickers()
