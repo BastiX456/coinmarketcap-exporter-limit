@@ -81,13 +81,11 @@ class CoinCollector():
       
       if debug == 1:
         log.info('CURRENCY: ' + currency)
-        
-      log.info('CURRENCY: ' + currency)
-      log.info('CACHE_TTL: ' + str(cache_ttl))
-      log.info('CACHE_MAX_SIZE: ' + str(cache_max_size))
-      log.info('LIMIT_MAX: ' + str(limit_max))
-      log.info('MODE: ' + str(mode))
-      log.info('SYMBOL: ' + symbol)
+        log.info('CACHE_TTL: ' + str(cache_ttl))
+        log.info('CACHE_MAX_SIZE: ' + str(cache_max_size))
+        log.info('LIMIT_MAX: ' + str(limit_max))
+        log.info('MODE: ' + str(mode))
+        log.info('SYMBOL: ' + symbol)
       
       # query the api
       response = self.client.tickers()
@@ -95,7 +93,9 @@ class CoinCollector():
       if 'data' not in response:
         log.error('No data in response. Is your API key set?')
       else:
-        log.info('Response: ' + str(response))
+        if debug == 2:
+          log.info('Response: ' + str(response))
+          
         for value in response['data']:
           for that in ['cmc_rank', 'total_supply', 'max_supply', 'circulating_supply']:
             coinmarketmetric = '_'.join(['coin_market', that])
