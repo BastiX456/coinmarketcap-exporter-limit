@@ -52,6 +52,9 @@ class CoinClient():
     if mode == 2:
       self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
       self.parameters = {'symbol': symbol, 'convert': currency} #10.11.2024
+    elif mode == 3:
+      self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
+      self.parameters = {'symbol': symbol, 'convert': currency} #10.11.2024
     else:
       self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
       self.parameters = {'start': '1', 'limit': limit_max, 'convert': currency} #10.11.2024
@@ -99,12 +102,15 @@ class CoinCollector():
 
         #Neuer Code für individuelle Abfragen
         if mode == 3: 
+          
+          #for symbol_data in response['data'].values():
+            #log.info('Test1: ' + str(symbol_data))
           for value in response['data']:  #jeder Hauptdatensatz. (BTC, ETH, ...) ist doppelt geschachtelt!
             log.info('Test1: ' + str(value)) ##########
             for that0 in [symbol2]: # z.B. BTC oder ETC
-                log.info('Test2: ' + str(that0)) ##########
-                log.info('Test22: ' + str(that0.items())) ##########
-                log.info('Test3: ' + str(value[that0])) ##########
+                log.info('Test2: ' + str(that0)) ########## = BTC
+                #log.info('Test22: ' + str(that0.items())) ##########
+                log.info('Test3: ' + str(value[that0])) ########## BTC
               
                 for that in ['cmc_rank', 'total_supply', 'max_supply', 'circulating_supply']:
                   log.info('Test4: ' + str(value[that0][that])) ##########
