@@ -100,8 +100,8 @@ class CoinCollector():
         if mode == 2: 
           for value in response['data']:  #jeder Hauptdatensatz. (BTC, ETH, ...) ist doppelt geschachtelt!
             log.info('Test1: ' + str(value)) ##########
-            for that in [symbol]: # z.B. BTC oder ETC
-                log.info('Test2: ' + str(that)) ##########
+            for that0 in [symbol]: # z.B. BTC oder ETC
+                log.info('Test2: ' + str(that0)) ##########
                 for that in ['cmc_rank', 'total_supply', 'max_supply', 'circulating_supply']:
                   coinmarketmetric = '_'.join(['coin_market', that])
                   if value[that] is not None:
