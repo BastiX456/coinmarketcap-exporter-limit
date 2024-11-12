@@ -54,7 +54,7 @@ class CoinClient():
       #self.parameters = {'start': '1', 'limit': '5000', 'convert': currency} # original
       #self.parameters = {'start': '1', 'limit': '1600', 'convert': currency}
       #self.parameters = {'start': '1', 'limit': '1600', 'convert': currency} #14.04.2024
-    else
+    else:
       self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
       self.parameters = {'symbol': symbol, 'convert': currency} #10.11.2024
     
