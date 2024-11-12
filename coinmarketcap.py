@@ -39,7 +39,7 @@ cache_max_size = int(os.environ.get('CACHE_MAX_SIZE', 4000)) #14.04.2024
 limit_max = int(os.environ.get('LIMIT_MAX', 1600)) #10.11.2024 Limit der Max. Werte
 debug = int(os.environ.get('DEBUG', 0)) #10.11.2024
 mode = int(os.environ.get('MODE', 1)) #10.11.2024
-symbol = int(os.environ.get('SYMBOL', 'BTC')) #10.11.2024
+symbol = os.environ.get('SYMBOL', 'BTC')) #10.11.2024
 cache = TTLCache(maxsize=cache_max_size, ttl=cache_ttl)
 
 
