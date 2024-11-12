@@ -78,7 +78,7 @@ class CoinCollector():
   def collect(self):
     with lock:
       log.info('collecting... in Mode:' + str(mode))
-      log.info('DEBUG: ' + debug)
+      log.info('DEBUG: ' + str(debug))
       
       #if debug == '1':
       log.info('CURRENCY: ' + currency)
