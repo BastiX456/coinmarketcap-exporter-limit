@@ -95,19 +95,41 @@ class CoinCollector():
       else:
         if debug == 2:
           log.info('Response: ' + str(response))
-          
-        for value in response['data']:
-          for that in ['cmc_rank', 'total_supply', 'max_supply', 'circulating_supply']:
-            coinmarketmetric = '_'.join(['coin_market', that])
-            if value[that] is not None:
-              metric.add_sample(coinmarketmetric, value=float(value[that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
-          for price in [currency]:
-            for that in ['price', 'volume_24h', 'market_cap', 'percent_change_1h', 'percent_change_24h', 'percent_change_7d']:
-              coinmarketmetric = '_'.join(['coin_market', that, price]).lower()
-              if value['quote'][price] is None:
-                continue
-              if value['quote'][price][that] is not None:
-                metric.add_sample(coinmarketmetric, value=float(value['quote'][price][that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
+
+        #Neuer Code für individuelle Abfragen
+        if mode == 2: 
+          for value in response['data']:  #jeder Hauptdatensatz. (BTC, ETH, ...) ist doppelt geschachtelt!
+            log.info('Test1: ' + str(value)) ##########
+            for that in [symbol]: # z.B. BTC oder ETC
+                log.info('Test2: ' + str(that)) ##########
+                for that in ['cmc_rank', 'total_supply', 'max_supply', 'circulating_supply']:
+                  coinmarketmetric = '_'.join(['coin_market', that])
+                  if value[that] is not None:
+                    log.info('Test3: ' + str(value[that])) ##########
+                    metric.add_sample(coinmarketmetric, value=float(value[that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
+                for price in [currency]:
+                  for that in ['price', 'volume_24h', 'market_cap', 'percent_change_1h', 'percent_change_24h', 'percent_change_7d']:
+                    coinmarketmetric = '_'.join(['coin_market', that, price]).lower()
+                    if value['quote'][price] is None:
+                      continue
+                    if value['quote'][price][that] is not None:
+                      metric.add_sample(coinmarketmetric, value=float(value['quote'][price][that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
+        
+        #alter Code für Standard abfragen
+        else:
+          for value in response['data']:  #jeder Hauptdatensatz. (BTC, ETH, ...)
+            for that in ['cmc_rank', 'total_supply', 'max_supply', 'circulating_supply']: # z.B. cmc_rank in BTC = 1
+              coinmarketmetric = '_'.join(['coin_market', that])
+              if value[that] is not None:
+                metric.add_sample(coinmarketmetric, value=float(value[that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
+            for price in [currency]: # z.B. "price" im Ersten BTC Datensatz in z.B. USD[]
+              for that in ['price', 'volume_24h', 'market_cap', 'percent_change_1h', 'percent_change_24h', 'percent_change_7d']:
+                coinmarketmetric = '_'.join(['coin_market', that, price]).lower()
+                if value['quote'][price] is None:
+                  continue
+                if value['quote'][price][that] is not None:
+                  metric.add_sample(coinmarketmetric, value=float(value['quote'][price][that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})  
+      
       yield metric
 
 if __name__ == '__main__':
