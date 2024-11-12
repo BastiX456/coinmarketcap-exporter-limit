@@ -90,7 +90,8 @@ class CoinCollector():
         log.info('LIMIT_MAX: ' + str(limit_max))
         log.info('MODE: ' + str(mode))
         log.info('SYMBOL: ' + symbol)
-      
+        log.info('SYMBOL2: ' + symbol2)
+        
       # query the api
       response = self.client.tickers()
       metric = Metric('coin_market', 'coinmarketcap metric values', 'gauge')
@@ -110,21 +111,24 @@ class CoinCollector():
             for that0 in [symbol2]: # z.B. BTC oder ETC
                 log.info('Test2: ' + str(that0)) ########## = BTC
                 #log.info('Test22: ' + str(that0.items())) ##########
-                log.info('Test3: ' + str(value[that0])) ########## BTC
+                #log.info('Test3: ' + str(value[that0])) ########## BTC
               
                 for that in ['cmc_rank', 'total_supply', 'max_supply', 'circulating_supply']:
-                  log.info('Test4: ' + str(value[that0][that])) ##########
-                  log.info('Test5: ' + str(value[that0])) ##########
+                  #log.info('Test4: ' + str(value[that0][that])) ##########
+                  #log.info('Test5: ' + str(value[that0])) ##########
+                  log.info('Test10:' + str(that)) ##########
                   coinmarketmetric = '_'.join(['coin_market', that])
                   if value[that0][that] is not None:
-                    metric.add_sample(coinmarketmetric, value=float(value[that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
+                    log.info('Test11:' + str(that)) ##########
+                    log.info('Test12:' + str(value[that0][that])) ##########
+                    metric.add_sample(coinmarketmetric, value=float(value[that0][that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
                 for price in [currency]:
                   for that in ['price', 'volume_24h', 'market_cap', 'percent_change_1h', 'percent_change_24h', 'percent_change_7d']:
                     coinmarketmetric = '_'.join(['coin_market', that, price]).lower()
                     if value['quote'][price] is None:
                       continue
-                    if value['quote'][price][that][that0] is not None:
-                      metric.add_sample(coinmarketmetric, value=float(value['quote'][price][that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
+                    if value['quote'][price][that0][that] is not None:
+                      metric.add_sample(coinmarketmetric, value=float(value['quote'][price][that0][that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
         elif mode == 2:
           for symbol_data in response['data'].values():
             log.info('Test1: ' + str(symbol_data))
