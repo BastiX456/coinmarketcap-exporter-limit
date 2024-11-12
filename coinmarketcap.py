@@ -48,7 +48,7 @@ class CoinClient():
     #self.parameters = {'start': '1', 'limit': '5000', 'convert': currency} # original
     #self.parameters = {'start': '1', 'limit': '1600', 'convert': currency}
     #self.parameters = {'start': '1', 'limit': '1600', 'convert': currency} #14.04.2024
-    self.parameters = {'start': '1', 'limit': limit_max, 'convert': currency} #14.04.2024
+    self.parameters = {'start': '1', 'limit': limit_max, 'convert': currency} #10.11.2024
 
   @cached(cache)
   def tickers(self):
