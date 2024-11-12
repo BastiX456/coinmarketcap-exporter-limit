@@ -48,7 +48,7 @@ class CoinClient():
 
     self.headers = {'Accepts': 'application/json', 'X-CMC_PRO_API_KEY': cak}
     
-    if mode == '1'
+    if mode is '1'
       self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
       self.parameters = {'start': '1', 'limit': limit_max, 'convert': currency} #10.11.2024
       #self.parameters = {'start': '1', 'limit': '5000', 'convert': currency} # original
@@ -79,7 +79,7 @@ class CoinCollector():
     with lock:
       log.info('collecting... in Mode:' + mode)
 
-      if debug == '1'
+      if debug is '1'
         log.info('CURRENCY: ' + currency)
         log.info('CACHE_TTL: ' + cache_ttl)
         log.info('CACHE_MAX_SIZE: ' + cache_max_size)
