@@ -48,16 +48,15 @@ class CoinClient():
 
     self.headers = {'Accepts': 'application/json', 'X-CMC_PRO_API_KEY': cak}
     
-    if mode == '1':
+    if mode == 2:
+      self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
+      self.parameters = {'symbol': symbol, 'convert': currency} #10.11.2024
+    else:
       self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
       self.parameters = {'start': '1', 'limit': limit_max, 'convert': currency} #10.11.2024
       #self.parameters = {'start': '1', 'limit': '5000', 'convert': currency} # original
       #self.parameters = {'start': '1', 'limit': '1600', 'convert': currency}
       #self.parameters = {'start': '1', 'limit': '1600', 'convert': currency} #14.04.2024
-    else:
-      self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
-      self.parameters = {'symbol': symbol, 'convert': currency} #10.11.2024
-    
 
   @cached(cache)
   def tickers(self):
@@ -80,7 +79,9 @@ class CoinCollector():
       log.info('collecting... in Mode:' + str(mode))
       log.info('DEBUG: ' + str(debug))
       
-      #if debug == '1':
+      if debug == 1:
+        log.info('CURRENCY: ' + currency)
+        
       log.info('CURRENCY: ' + currency)
       log.info('CACHE_TTL: ' + str(cache_ttl))
       log.info('CACHE_MAX_SIZE: ' + str(cache_max_size))
