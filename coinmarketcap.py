@@ -73,8 +73,7 @@ class CoinClient():
   @cached(cache)
   def tickers(self):
     global modeswitch  # Declare modeswitch as a global variable inside the class
-    global CollectDataNumber
-    
+        
     #log.info('Fetching data from the API #Modeswitch: ' + str(modeswitch))
     if mode_auto == 1: #Wechseln der Abfragen
       CollectDataNumber = CollectDataNumber + 1
@@ -108,6 +107,7 @@ class CoinCollector():
     global response    # Declare modes as a global variable inside the class
     global response0   # Declare modes as a global variable inside the class
     global response1   # Declare modes as a global variable inside the class   
+    global CollectDataNumber
     
     with lock:
             
