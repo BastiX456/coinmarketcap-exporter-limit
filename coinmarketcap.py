@@ -113,7 +113,7 @@ class CoinCollector():
                     log.info('Test11:' + str(that)) ##########
                     metric.add_sample(coinmarketmetric, value=float(value[that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
                 for price in [currency]:
-                  for that in ['price', 'volume_24h', 'market_cap', 'percent_change_1h', 'percent_change_24h', 'percent_change_7d']:
+                  for that in ['price', 'volume_24h', 'volume_change_24h', 'market_cap', 'percent_change_1h', 'percent_change_24h', 'percent_change_7d', 'percent_change_30d', 'percent_change_60d', 'percent_change_90d', 'market_cap_dominance', 'fully_diluted_market_cap']:
                     coinmarketmetric = '_'.join(['coin_market', that, price]).lower()
                     if value['quote'][price] is None:
                       continue
@@ -121,8 +121,9 @@ class CoinCollector():
                       metric.add_sample(coinmarketmetric, value=float(value['quote'][price][that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
         elif mode == 2:
           for value in response['status']:  #Status holen
+            log.info('Test1: ' + str(value))
             for that in ['elapsed']:
-            coinmarketmetric = '_'.join(['status', that])      
+              coinmarketmetric = '_'.join(['status', that])      
               if value[that] is not None:
                 metric.add_sample(coinmarketmetric, value=float(value[that]), labels={'timestamp': value['timestamp'], 'error_code': value['name'], 'error_message': value['name'], 'elapsed': value['name'], 'credit_count': value['name'], 'notice': value['name']})         
         
@@ -134,7 +135,7 @@ class CoinCollector():
               if value[that] is not None:
                 metric.add_sample(coinmarketmetric, value=float(value[that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
             for price in [currency]: # z.B. "price" im Ersten BTC Datensatz in z.B. USD[]
-              for that in ['price', 'volume_24h', 'market_cap', 'percent_change_1h', 'percent_change_24h', 'percent_change_7d']:
+              for that in ['price', 'volume_24h', 'volume_change_24h', 'market_cap', 'percent_change_1h', 'percent_change_24h', 'percent_change_7d', 'percent_change_30d', 'percent_change_60d', 'percent_change_90d', 'market_cap_dominance', 'fully_diluted_market_cap']:
                 coinmarketmetric = '_'.join(['coin_market', that, price]).lower()
                 if value['quote'][price] is None:
                   continue
