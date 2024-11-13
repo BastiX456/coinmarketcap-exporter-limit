@@ -146,7 +146,7 @@ class CoinCollector():
           log.error('No data in response1. Is your API key set?')
         else:
           
-          for CollectDataNumber > 0
+          for CollectDataNumber > 0:
 
             if CollectDataNumber == 2:
               mode = 1
