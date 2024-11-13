@@ -122,10 +122,11 @@ class CoinCollector():
                       metric.add_sample(coinmarketmetric, value=float(value['quote'][price][that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
         elif mode == 2:
           for value in response['status']:  #Status holen
-            for that in ['timestamp', 'error_code', 'error_message', 'elapsed', 'credit_count']:
+            for that in ['elapsed']:
             coinmarketmetric = '_'.join(['status', that])      
               if value[that] is not None:
-                metric.add_sample(coinmarketmetric, value=float(value[that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})         
+                metric.add_sample(coinmarketmetric, value=float(value[that]), labels={'timestamp': value['timestamp'], 'error_code': value['name'], 'error_message': value['name'], 'elapsed': value['name'], 'credit_count': value['name'], 'notice': value['name']})         
+        
         #alter Code für Standard abfragen
         else:
           for value in response['data']:  #jeder Hauptdatensatz. (BTC, ETH, ...)
