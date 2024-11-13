@@ -93,7 +93,7 @@ class CoinCollector():
         
       # query the api
       response = self.client.tickers()
-      metric = Metric('status', 'coin_market', 'coinmarketcap metric values', 'gauge')
+      metric = Metric('coin_market', 'coinmarketcap metric values', 'gauge')
       if 'data' not in response:
         log.error('No data in response. Is your API key set?')
       else:
@@ -122,8 +122,8 @@ class CoinCollector():
         elif mode == 2:
           for value in response['status']:  #Status holen
             log.info('Test1: ' + str(value))
-            for that in ['elapsed']:
-              coinmarketmetric = '_'.join(['status', that])      
+            for that in ['status-elapsed: ']:
+              coinmarketmetric = '_'.join(['coin_market', that])      
               if value[that] is not None:
                 metric.add_sample(coinmarketmetric, value=float(value[that]), labels={'timestamp': value['timestamp'], 'error_code': value['name'], 'error_message': value['name'], 'elapsed': value['name'], 'credit_count': value['name'], 'notice': value['name']})         
         
