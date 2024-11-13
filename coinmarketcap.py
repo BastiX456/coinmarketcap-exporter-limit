@@ -45,7 +45,7 @@ if mode == 3:
   cache_ttl = cache_ttl/2
   
 cache = TTLCache(maxsize=cache_max_size, ttl=cache_ttl)
-modeswitch = 0
+modeswitch = os.environ.get('MODESWITCH', 0) 
 
 
 class CoinClient():
