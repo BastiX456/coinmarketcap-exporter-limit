@@ -71,7 +71,7 @@ class CoinClient():
       #self.parameters = {'start': '1', 'limit': '1600', 'convert': currency} #14.04.2024
 
   @cached(cache)
-  def tickers(self):
+  def tickers(self, CollectDataNumber):
     global modeswitch  # Declare modeswitch as a global variable inside the class
         
     #log.info('Fetching data from the API #Modeswitch: ' + str(modeswitch))
@@ -133,9 +133,10 @@ class CoinCollector():
         CollectDataNumber = 1
       # query the api
       if CollectDataNumber == 1:
-        response0 = self.client.tickers()
+        response0 = self.client.tickers(CollectDataNumber)
       elif CollectDataNumber == 2: 
-        response1 = self.client.tickers()
+        #response1 = self.client.tickers()
+        response1 = self.client.tickers(CollectDataNumber)
         
       metric = Metric('coin_market', 'coinmarketcap metric values', 'gauge')
 
