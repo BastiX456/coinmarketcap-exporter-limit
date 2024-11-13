@@ -128,7 +128,9 @@ class CoinCollector():
         response = response0
         response1 = response0
         CollectDataNumber = 2 
-        
+
+      if CollectDataNumber == 0:
+        CollectDataNumber = 1
       # query the api
       if CollectDataNumber == 1:
         response0 = self.client.tickers()
