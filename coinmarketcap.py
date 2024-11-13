@@ -140,7 +140,7 @@ class CoinCollector():
               coinmarketmetric = '_'.join(['coin_market', key])
     
               if value is not None:
-                  metric.add_sample(coinmarketmetric, value=float(value), labels={'timestamp': response['status']['timestamp'], 'error_code': response['status']['error_code'], 'error_message': response['status']['error_message'], 'elapsed': response['status']['elapsed'], 'credit_count': response['status']['credit_count'], 'notice': response['status']['notice']})
+                  metric.add_sample(coinmarketmetric, value=str(value), labels={'timestamp': response['status']['timestamp'], 'error_code': response['status']['error_code'], 'error_message': response['status']['error_message'], 'elapsed': response['status']['elapsed'], 'credit_count': response['status']['credit_count'], 'notice': response['status']['notice']})
         
         #alter Code für Standard abfragen
         else:
