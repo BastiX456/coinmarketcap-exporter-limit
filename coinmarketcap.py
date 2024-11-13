@@ -76,7 +76,6 @@ class CoinClient():
         
     #log.info('Fetching data from the API #Modeswitch: ' + str(modeswitch))
     if mode_auto == 1: #Wechseln der Abfragen
-      CollectDataNumber = CollectDataNumber + 1
       log.info('Fetching data from the API #Modeswitch: ' + str(modeswitch))
       if modeswitch == 0:  #normale Abfrage
         modeswitch = 1
@@ -86,6 +85,8 @@ class CoinClient():
         modeswitch = 0 
         self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
         self.parameters = {'symbol': symbol, 'convert': currency} #10.11.2024
+
+      CollectDataNumber = CollectDataNumber + 1
     else:
       log.info('Fetching data from the API #Modeswitch: OFF')
       
@@ -96,7 +97,7 @@ class CoinClient():
     if 'data' not in data:
       log.error('No data in response. Is your API key set?')
       log.info(data)
-    return data
+    return CollectDataNumber, data
 
 class CoinCollector():
   def __init__(self):
@@ -133,10 +134,10 @@ class CoinCollector():
         CollectDataNumber = 1
       # query the api
       if CollectDataNumber == 1:
-        response0 = self.client.tickers(CollectDataNumber)
+        CollectDataNumber, response0 = self.client.tickers(CollectDataNumber)
       elif CollectDataNumber == 2: 
         #response1 = self.client.tickers()
-        response1 = self.client.tickers(CollectDataNumber)
+        CollectDataNumber, response1 = self.client.tickers(CollectDataNumber)
         
       metric = Metric('coin_market', 'coinmarketcap metric values', 'gauge')
 
