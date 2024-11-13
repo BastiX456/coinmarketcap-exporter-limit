@@ -76,12 +76,10 @@ class CoinClient():
       log.info('Fetching data from the API #Modeswitch: ' + str(modeswitch))
       if modeswitch == 0:  #normale Abfrage
         modeswitch = 1
-        mode = 1
         self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
         self.parameters = {'start': '1', 'limit': limit_max, 'convert': currency} #10.11.2024
       else: 
         modeswitch = 0 
-        mode = 3
         self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
         self.parameters = {'symbol': symbol, 'convert': currency} #10.11.2024
     else:
@@ -122,6 +120,13 @@ class CoinCollector():
         if debug == 2:
           log.info('Response: ' + str(response))
 
+        #Modus prüfen
+        if mode_auto == 1: #Wechseln der Abfragen
+          if modeswitch == 0:  #normale Abfrage
+            mode = 1
+          else: 
+            mode = 3
+     
         #Neuer Code für individuelle Abfragen + Status
         if mode == 3: 
           for key, value in response['status'].items(): #Alle Status Infos loggen!
