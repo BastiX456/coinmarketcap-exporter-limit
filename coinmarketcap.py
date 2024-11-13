@@ -48,6 +48,8 @@ if mode_auto == 1:
 cache = TTLCache(maxsize=cache_max_size, ttl=cache_ttl)
 modeswitch = 0
 CollectDataNumber = 1
+response0 = 0
+response1 = 0
 
 
 class CoinClient():
@@ -116,6 +118,7 @@ class CoinCollector():
         log.info('MODE: ' + str(mode))
         log.info('SYMBOL: ' + symbol)
         log.info('MODE_AUTO: ' + str(mode_auto))
+        log.info('CollectDataNumber: ' + str(CollectDataNumber))
       
       
       #Modus prüfen
@@ -160,7 +163,8 @@ class CoinCollector():
               CollectDataNumber = 0
               
             if debug == 2:
-              log.info('Response: ' + str(response))
+              log.info('Response: ' + str(response0))
+              log.info('Response: ' + str(response1))
               
             log.info('collecting... in Mode:' + str(mode))    
             #log.info('modeF: ' + str(mode))
