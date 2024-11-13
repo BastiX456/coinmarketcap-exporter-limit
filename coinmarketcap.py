@@ -108,7 +108,7 @@ class CoinCollector():
         log.info('LIMIT_MAX: ' + str(limit_max))
         log.info('MODE: ' + str(mode))
         log.info('SYMBOL: ' + symbol)
-        log.info('SYMBOL2: ' + symbol2)
+        #log.info('SYMBOL2: ' + symbol2)
         
       # query the api
       response = self.client.tickers()
