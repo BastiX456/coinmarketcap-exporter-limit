@@ -148,8 +148,8 @@ class CoinCollector():
           log.error('No data in response0. Is your API key set?')
           CollectDataNumber = 0
         elif isinstance(response1, int) or 'data' not in response1:
-          log.error('No data in response1. Is your API key set?')
-          CollectDataNumber = 0
+          #log.error('No data in response1. Is your API key set?')
+          CollectDataNumber = 2
         else:
           
           while CollectDataNumber > 0:
