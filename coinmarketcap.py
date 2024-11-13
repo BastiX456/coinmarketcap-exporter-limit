@@ -79,7 +79,7 @@ class CoinClient():
         modeswitch = 0 
         self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
         self.parameters = {'symbol': symbol, 'convert': currency} #10.11.2024
-    else
+    else:
       log.info('Fetching data from the API #Modeswitch: OFF')
       
     session = Session()
