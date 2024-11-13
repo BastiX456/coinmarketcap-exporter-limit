@@ -39,9 +39,10 @@ cache_max_size = int(os.environ.get('CACHE_MAX_SIZE', 4000)) #14.04.2024
 limit_max = int(os.environ.get('LIMIT_MAX', 1600)) #10.11.2024 Limit der Max. Werte
 debug = int(os.environ.get('DEBUG', 0)) #10.11.2024
 mode = int(os.environ.get('MODE', 1)) #10.11.2024
+mode_auto = int(os.environ.get('MODE_AUTO', 0)) #10.11.2024
 symbol = os.environ.get('SYMBOL', 'BTC') #10.11.2024
 #symbol2 = os.environ.get('SYMBOL2', 'BTC') #10.11.2024
-if mode == 3:
+if mode_auto == 1:
   cache_ttl = cache_ttl/2
   
 cache = TTLCache(maxsize=cache_max_size, ttl=cache_ttl)
@@ -71,14 +72,16 @@ class CoinClient():
     global modeswitch  # Declare modeswitch as a global variable inside the class
     
     #log.info('Fetching data from the API #Modeswitch: ' + str(modeswitch))
-    if mode == 3: #Wechseln der Abfragen
+    if mode_auto == 1: #Wechseln der Abfragen
       log.info('Fetching data from the API #Modeswitch: ' + str(modeswitch))
       if modeswitch == 0:  #normale Abfrage
         modeswitch = 1
+        mode = 1
         self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
         self.parameters = {'start': '1', 'limit': limit_max, 'convert': currency} #10.11.2024
       else: 
         modeswitch = 0 
+        mode = 3
         self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
         self.parameters = {'symbol': symbol, 'convert': currency} #10.11.2024
     else:
@@ -108,7 +111,7 @@ class CoinCollector():
         log.info('LIMIT_MAX: ' + str(limit_max))
         log.info('MODE: ' + str(mode))
         log.info('SYMBOL: ' + symbol)
-        #log.info('SYMBOL2: ' + symbol2)
+        log.info('MODE_AUTO: ' + str(mode_auto))
         
       # query the api
       response = self.client.tickers()
@@ -162,6 +165,15 @@ class CoinCollector():
     
         #alter Code für Standard abfragen
         else:
+            for key, value in response['status'].items(): #Alle Status Infos loggen!
+              #log.info('Test1: ' + str(value))
+              #log.info('Test2: ' + str(key))
+              coinmarketmetric = '_'.join(['coin_market', key])
+            
+            if key not in response['status']:
+                continue
+            metric.add_sample(coinmarketmetric, value=float(0), labels={str(key): str(value)})
+          
           for value in response['data']:  #jeder Hauptdatensatz. (BTC, ETH, ...)
             for that in ['cmc_rank', 'total_supply', 'max_supply', 'circulating_supply']: # z.B. cmc_rank in BTC = 1
               coinmarketmetric = '_'.join(['coin_market', that])
