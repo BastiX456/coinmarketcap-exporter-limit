@@ -70,7 +70,7 @@ class CoinClient():
   def tickers(self):
     global modeswitch  # Declare modeswitch as a global variable inside the class
     
-    log.info('Fetching data from the API #Modeswitch: ' + str(modeswitch))
+    #log.info('Fetching data from the API #Modeswitch: ' + str(modeswitch))
     if mode == 3: #Wechseln der Abfragen
       log.info('Fetching data from the API #Modeswitch: ' + str(modeswitch))
       if modeswitch == 0:  #normale Abfrage
