@@ -99,6 +99,8 @@ class CoinCollector():
     self.client = CoinClient()
 
   def collect(self):
+    global mode        # Declare modes as a global variable inside the class
+    
     with lock:
       log.info('collecting... in Mode:' + str(mode))
             
