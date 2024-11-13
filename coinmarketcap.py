@@ -41,7 +41,11 @@ debug = int(os.environ.get('DEBUG', 0)) #10.11.2024
 mode = int(os.environ.get('MODE', 1)) #10.11.2024
 symbol = os.environ.get('SYMBOL', 'BTC') #10.11.2024
 #symbol2 = os.environ.get('SYMBOL2', 'BTC') #10.11.2024
+if mode == 3:
+  cache_ttl = cache_ttl/2
+  
 cache = TTLCache(maxsize=cache_max_size, ttl=cache_ttl)
+modeswitch = 0
 
 
 class CoinClient():
@@ -64,7 +68,20 @@ class CoinClient():
 
   @cached(cache)
   def tickers(self):
-    log.info('Fetching data from the API')
+    log.info('Fetching data from the API #Modeswitch: ' + str(modeswitch))
+    if mode == 3: #Wechseln der Abfragen
+      log.info('Fetching data from the API #Modeswitch: ' + str(modeswitch))
+      if modeswitch == 0:  #normale Abfrage
+        modeswitch = 1
+        self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
+        self.parameters = {'start': '1', 'limit': limit_max, 'convert': currency} #10.11.2024
+      else: 
+        modeswitch = 0 
+        self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
+        self.parameters = {'symbol': symbol, 'convert': currency} #10.11.2024
+    else
+      log.info('Fetching data from the API #Modeswitch: OFF')
+      
     session = Session()
     session.headers.update(self.headers)
     r = session.get(self.url, params=self.parameters)
@@ -100,17 +117,26 @@ class CoinCollector():
         if debug == 2:
           log.info('Response: ' + str(response))
 
-        #Neuer Code für individuelle Abfragen
+        #Neuer Code für individuelle Abfragen + Status
         if mode == 3: 
+          for key, value in response['status'].items(): #Alle Status Infos loggen!
+            #log.info('Test1: ' + str(value))
+            #log.info('Test2: ' + str(key))
+            coinmarketmetric = '_'.join(['coin_market', key])
+            
+            if key not in response['status']:
+                continue
+            metric.add_sample(coinmarketmetric, value=float(0), labels={str(key): str(value)})
+            
           for value in response['data'].values():
-            log.info('Test1: ' + str(value))
+            #log.info('Test1: ' + str(value))
             for that in ['Check']: # z.B. BTC oder ETC
-                log.info('Test2: ' + str(that)) ########## = BTC     
+                #log.info('Test2: ' + str(that)) ########## = BTC     
                 for that in ['cmc_rank', 'total_supply', 'max_supply', 'circulating_supply']:
-                  log.info('Test10:' + str(that)) ##########
+                  #log.info('Test10:' + str(that)) ##########
                   coinmarketmetric = '_'.join(['coin_market', that])
                   if value[that] is not None:
-                    log.info('Test11:' + str(that)) ##########
+                    #log.info('Test11:' + str(that)) ##########
                     metric.add_sample(coinmarketmetric, value=float(value[that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
                 for price in [currency]:
                   for that in ['price', 'volume_24h', 'volume_change_24h', 'market_cap', 'percent_change_1h', 'percent_change_24h', 'percent_change_7d', 'percent_change_30d', 'percent_change_60d', 'percent_change_90d', 'market_cap_dominance', 'fully_diluted_market_cap']:
@@ -119,37 +145,16 @@ class CoinCollector():
                       continue
                     if value['quote'][price][that] is not None:
                       metric.add_sample(coinmarketmetric, value=float(value['quote'][price][that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
+        # Nur Test der Status Abfrage
         elif mode == 2:
-          #for value in response['status']:  #Status holen
-            #log.info('Test1: ' + str(value))
-            #for that in ['status-elapsed: ']:
-              #coinmarketmetric = '_'.join(['coin_market', that])      
-              #if value[that] is not None:
-                #metric.add_sample(coinmarketmetric, value=float(value[that]), labels={'timestamp': value['timestamp'], 'error_code': value['name'], 'error_message': value['name'], 'elapsed': value['name'], 'credit_count': value['name'], 'notice': value['name']})         
 
-          #for value in response['status'].items():  # Iterating over key-value pairs in 'status'
-              #log.info('Test1: ' + str(value))
-              #for key, val in value.items():
-                 # coinmarketmetric = '_'.join(['coin_market', key])
-                  #if val is not None:
-                     # metric.add_sample(coinmarketmetric, value=float(val), labels={'timestamp': value['timestamp'], 'error_code': value['error_code'], 'error_message': value['error_message'], 'elapsed': value['elapsed'], 'credit_count': value['credit_count'], 'notice': value['notice']})
-          
-          #for key, value in response['status'].items():  # Iterating over key-value pairs in 'status'
-              #log.info('Test1: ' + str(value))
-              #log.info('Test2: ' + str(key))
-              #coinmarketmetric = '_'.join(['coin_market', key])
-    
-             # if value is not None:
-                  #metric.add_sample(coinmarketmetric, value=str(value), labels={'timestamp': response['status']['timestamp'], 'error_code': response['status']['error_code'], 'error_message': response['status']['error_message'], 'elapsed': response['status']['elapsed'], 'credit_count': response['status']['credit_count'], 'notice': response['status']['notice']})
-    
           for key, value in response['status'].items():
-            log.info('Test1: ' + str(value))
-            log.info('Test2: ' + str(key))
+            #log.info('Test1: ' + str(value))
+            #log.info('Test2: ' + str(key))
             coinmarketmetric = '_'.join(['coin_market', key])
             
             if key not in response['status']:
                 continue
-            
             metric.add_sample(coinmarketmetric, value=float(0), labels={str(key): str(value)})
 
     
@@ -183,7 +188,7 @@ if __name__ == '__main__':
     start_http_server(int(args.port), addr=args.addr)
 
     while True:
-      time.sleep(60)
+      time.sleep(30)
   except KeyboardInterrupt:
     print(" Interrupted")
     exit(0)
