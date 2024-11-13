@@ -45,11 +45,13 @@ if mode == 3:
   cache_ttl = cache_ttl/2
   
 cache = TTLCache(maxsize=cache_max_size, ttl=cache_ttl)
-modeswitch = os.environ.get('MODESWITCH', 0) 
+modeswitch = 0
 
 
 class CoinClient():
   def __init__(self):
+    
+    global modeswitch  # Declare modeswitch as a global variable inside the class
 
     self.headers = {'Accepts': 'application/json', 'X-CMC_PRO_API_KEY': cak}
     
