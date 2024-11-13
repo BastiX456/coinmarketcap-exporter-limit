@@ -102,7 +102,6 @@ class CoinCollector():
     global mode        # Declare modes as a global variable inside the class
     
     with lock:
-      log.info('collecting... in Mode:' + str(mode))
             
       if debug == 1:
         log.info('CURRENCY: ' + currency)
@@ -129,12 +128,13 @@ class CoinCollector():
           else: 
             mode = 1
             
-        log.info('modeF: ' + str(mode))
+        log.info('collecting... in Mode:' + str(mode))    
+        #log.info('modeF: ' + str(mode))
         #Neuer Code für individuelle Abfragen + Status
         if mode == 3: 
           for key, value in response['status'].items(): #Alle Status Infos loggen!
-            log.info('Test1: ' + str(value))
-            log.info('Test2: ' + str(key))
+            #log.info('Test1: ' + str(value))
+            #log.info('Test2: ' + str(key))
             coinmarketmetric = '_'.join(['coin_market', key])
             
             if key not in response['status']:
@@ -142,7 +142,7 @@ class CoinCollector():
             metric.add_sample(coinmarketmetric, value=float(0), labels={str(key): str(value)})
             
           for value in response['data'].values():
-            log.info('Test1: ' + str(value))
+            #log.info('Test1: ' + str(value))
             for that in ['Check']: # z.B. BTC oder ETC
                 #log.info('Test2: ' + str(that)) ########## = BTC     
                 for that in ['cmc_rank', 'total_supply', 'max_supply', 'circulating_supply']:
@@ -174,8 +174,8 @@ class CoinCollector():
         #alter Code für Standard abfragen
         else:
           for key, value in response['status'].items(): #Alle Status Infos loggen!
-            log.info('Test1: ' + str(value))
-            log.info('Test2: ' + str(key))
+            #log.info('Test1: ' + str(value))
+            #log.info('Test2: ' + str(key))
             coinmarketmetric = '_'.join(['coin_market', key])
           
             if key not in response['status']:
@@ -183,7 +183,7 @@ class CoinCollector():
             metric.add_sample(coinmarketmetric, value=float(0), labels={str(key): str(value)})
           
           for value in response['data']:  #jeder Hauptdatensatz. (BTC, ETH, ...)
-            log.info('Test9: ' + str(value))
+            #log.info('Test9: ' + str(value))
             for that in ['cmc_rank', 'total_supply', 'max_supply', 'circulating_supply']: # z.B. cmc_rank in BTC = 1
               coinmarketmetric = '_'.join(['coin_market', that])
               if value[that] is not None:
@@ -211,7 +211,7 @@ if __name__ == '__main__':
     start_http_server(int(args.port), addr=args.addr)
 
     while True:
-      time.sleep(30)
+      time.sleep(10)
   except KeyboardInterrupt:
     print(" Interrupted")
     exit(0)
