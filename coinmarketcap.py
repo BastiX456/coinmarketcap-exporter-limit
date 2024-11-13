@@ -124,13 +124,7 @@ class CoinCollector():
       
       
       #Modus prüfen
-      if mode_auto == 1: #Wechseln der Abfragen
-        #if modeswitch == 0:  #normale Abfrage
-          #mode = 3
-        #else: 
-          #mode = 1
-        #CollectDataNumber = CollectDataNumber + 1
-      else:
+      if mode_auto != 1: #Wechseln der Abfragen
         response = response0
         response1 = response0
         CollectDataNumber = 2 
