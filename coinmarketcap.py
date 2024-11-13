@@ -120,7 +120,7 @@ class CoinCollector():
                   coinmarketmetric = '_'.join(['coin_market', that])
                   if value[that] is not None:
                     log.info('Test11:' + str(that)) ##########
-                     metric.add_sample(coinmarketmetric, value=float(value[that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
+                    metric.add_sample(coinmarketmetric, value=float(value[that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
                 for price in [currency]:
                   for that in ['price', 'volume_24h', 'market_cap', 'percent_change_1h', 'percent_change_24h', 'percent_change_7d']:
                     coinmarketmetric = '_'.join(['coin_market', that, price]).lower()
