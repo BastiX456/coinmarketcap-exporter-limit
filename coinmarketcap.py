@@ -143,10 +143,11 @@ class CoinCollector():
       metric = Metric('coin_market', 'coinmarketcap metric values', 'gauge')
 
       if CollectDataNumber == 2:
-        if 'data' not in response0:
+        log.info('CollectDataNumber: 2 Check')
+        if isinstance(response0, int) or 'data' not in response0:
           log.error('No data in response0. Is your API key set?')
           CollectDataNumber = 0
-        elif 'data' not in response1:
+        elif isinstance(response1, int) or 'data' not in response1:
           log.error('No data in response1. Is your API key set?')
           CollectDataNumber = 0
         else:
