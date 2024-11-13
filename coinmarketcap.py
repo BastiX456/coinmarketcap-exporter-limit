@@ -165,14 +165,14 @@ class CoinCollector():
     
         #alter Code für Standard abfragen
         else:
-            for key, value in response['status'].items(): #Alle Status Infos loggen!
-              #log.info('Test1: ' + str(value))
-              #log.info('Test2: ' + str(key))
-              coinmarketmetric = '_'.join(['coin_market', key])
-            
-            if key not in response['status']:
-                continue
-            metric.add_sample(coinmarketmetric, value=float(0), labels={str(key): str(value)})
+          for key, value in response['status'].items(): #Alle Status Infos loggen!
+            #log.info('Test1: ' + str(value))
+            #log.info('Test2: ' + str(key))
+            coinmarketmetric = '_'.join(['coin_market', key])
+          
+          if key not in response['status']:
+              continue
+          metric.add_sample(coinmarketmetric, value=float(0), labels={str(key): str(value)})
           
           for value in response['data']:  #jeder Hauptdatensatz. (BTC, ETH, ...)
             for that in ['cmc_rank', 'total_supply', 'max_supply', 'circulating_supply']: # z.B. cmc_rank in BTC = 1
