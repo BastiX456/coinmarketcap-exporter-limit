@@ -120,12 +120,19 @@ class CoinCollector():
                     if value['quote'][price][that] is not None:
                       metric.add_sample(coinmarketmetric, value=float(value['quote'][price][that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
         elif mode == 2:
-          for value in response['status']:  #Status holen
-            log.info('Test1: ' + str(value))
-            for that in ['status-elapsed: ']:
-              coinmarketmetric = '_'.join(['coin_market', that])      
-              if value[that] is not None:
-                metric.add_sample(coinmarketmetric, value=float(value[that]), labels={'timestamp': value['timestamp'], 'error_code': value['name'], 'error_message': value['name'], 'elapsed': value['name'], 'credit_count': value['name'], 'notice': value['name']})         
+          #for value in response['status']:  #Status holen
+            #log.info('Test1: ' + str(value))
+            #for that in ['status-elapsed: ']:
+              #coinmarketmetric = '_'.join(['coin_market', that])      
+              #if value[that] is not None:
+                #metric.add_sample(coinmarketmetric, value=float(value[that]), labels={'timestamp': value['timestamp'], 'error_code': value['name'], 'error_message': value['name'], 'elapsed': value['name'], 'credit_count': value['name'], 'notice': value['name']})         
+
+          for value in response['status'].items():  # Iterating over key-value pairs in 'status'
+              log.info('Test1: ' + str(value))
+              for key, val in value.items():
+                  coinmarketmetric = '_'.join(['coin_market', key])
+                  if val is not None:
+                      metric.add_sample(coinmarketmetric, value=float(val), labels={'timestamp': value['timestamp'], 'error_code': value['error_code'], 'error_message': value['error_message'], 'elapsed': value['elapsed'], 'credit_count': value['credit_count'], 'notice': value['notice']})
         
         #alter Code für Standard abfragen
         else:
