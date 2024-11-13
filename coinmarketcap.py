@@ -131,7 +131,7 @@ class CoinCollector():
           CollectDataNumber = 2
       else:
         response = response0
-        respone1 = response0
+        response1 = response0
         CollectDataNumber = 2 
         
       # query the api
@@ -153,10 +153,10 @@ class CoinCollector():
 
             if CollectDataNumber == 2:
               mode = 1
-              respone = respone1
+              respone = response1
             elif CollectDataNumber == 1: 
               mode = 3
-              respone = respone0
+              respone = response0
           
             CollectDataNumber = CollectDataNumber - 1
             if mode_auto == 0:
