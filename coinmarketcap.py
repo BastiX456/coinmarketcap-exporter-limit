@@ -133,7 +133,7 @@ class CoinCollector():
             log.info('Test1: ' + str(symbol_data))
             
             for that0, value in symbol_data.items():
-                if that0 == symbol2:
+                if that0 == 'BTC':
                     log.info('Test2: ' + str(that0))
                     log.info('Test3: ' + str(value))
                     
