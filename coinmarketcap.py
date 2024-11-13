@@ -104,6 +104,7 @@ class CoinCollector():
 
   def collect(self):
     global mode        # Declare modes as a global variable inside the class
+    global response    # Declare modes as a global variable inside the class
     global response0   # Declare modes as a global variable inside the class
     global response1   # Declare modes as a global variable inside the class
     global CollectDataNumber
