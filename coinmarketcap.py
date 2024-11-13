@@ -81,8 +81,7 @@ class CoinCollector():
   def collect(self):
     with lock:
       log.info('collecting... in Mode:' + str(mode))
-      log.info('DEBUG: ' + str(debug))
-      
+            
       if debug == 1:
         log.info('CURRENCY: ' + currency)
         log.info('CACHE_TTL: ' + str(cache_ttl))
@@ -151,7 +150,8 @@ if __name__ == '__main__':
     parser.add_argument('--addr', nargs='?', const='0.0.0.0', help='The interface to bind to', default='0.0.0.0')
     args = parser.parse_args()
     log.info('listening on http://%s:%d/metrics' % (args.addr, args.port))
-
+    log.info('DEBUG: ' + str(debug))
+    
     REGISTRY.register(CoinCollector())
     start_http_server(int(args.port), addr=args.addr)
 
