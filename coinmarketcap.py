@@ -47,7 +47,7 @@ if mode_auto == 1:
   
 cache = TTLCache(maxsize=cache_max_size, ttl=cache_ttl)
 modeswitch = 0
-CollectDataNumber = 1
+CollectDataNumber = 0
 response0 = 0
 response1 = 0
 
@@ -77,7 +77,6 @@ class CoinClient():
     #log.info('Fetching data from the API #Modeswitch: ' + str(modeswitch))
     if mode_auto == 1: #Wechseln der Abfragen
       log.info('Fetching data from the API #Modeswitch: ' + str(modeswitch))
-      CollectDataNumber = 1
       if modeswitch == 0:  #normale Abfrage
         modeswitch = 1
         self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
@@ -119,17 +118,17 @@ class CoinCollector():
         log.info('MODE: ' + str(mode))
         log.info('SYMBOL: ' + symbol)
         log.info('MODE_AUTO: ' + str(mode_auto))
+        log.info('modeswitch: ' + str(modeswitch))
         log.info('CollectDataNumber: ' + str(CollectDataNumber))
       
       
       #Modus prüfen
       if mode_auto == 1: #Wechseln der Abfragen
-        if modeswitch == 0:  #normale Abfrage
+        #if modeswitch == 0:  #normale Abfrage
           #mode = 3
-          CollectDataNumber = 1
-        else: 
+        #else: 
           #mode = 1
-          CollectDataNumber = 2
+        CollectDataNumber = CollectDataNumber + 1
       else:
         response = response0
         response1 = response0
@@ -146,8 +145,10 @@ class CoinCollector():
       if CollectDataNumber == 2:
         if 'data' not in response0:
           log.error('No data in response0. Is your API key set?')
+          CollectDataNumber = 0
         elif 'data' not in response1:
           log.error('No data in response1. Is your API key set?')
+          CollectDataNumber = 0
         else:
           
           while CollectDataNumber > 0:
@@ -164,8 +165,8 @@ class CoinCollector():
               CollectDataNumber = 0
               
             if debug == 2:
-              log.info('Response: ' + str(response0))
-              log.info('Response: ' + str(response1))
+              log.info('Response0: ' + str(response0))
+              log.info('Response1: ' + str(response1))
               
             log.info('collecting... in Mode:' + str(mode))    
             #log.info('modeF: ' + str(mode))
