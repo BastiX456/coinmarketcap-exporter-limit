@@ -150,11 +150,7 @@ class CoinCollector():
             if key not in response['status']:
                 continue
             
-            labels = {
-                'timestamp': str(response['status']['timestamp'])
-            }
-            
-            metric.add_sample(coinmarketmetric, value=str(value), labels=labels)
+            metric.add_sample(coinmarketmetric, value=float(0), labels={str(key): str(value)})
 
     
         #alter Code für Standard abfragen
