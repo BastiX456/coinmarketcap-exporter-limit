@@ -76,6 +76,7 @@ class CoinClient():
     
     #log.info('Fetching data from the API #Modeswitch: ' + str(modeswitch))
     if mode_auto == 1: #Wechseln der Abfragen
+      CollectDataNumber = CollectDataNumber + 1
       log.info('Fetching data from the API #Modeswitch: ' + str(modeswitch))
       if modeswitch == 0:  #normale Abfrage
         modeswitch = 1
@@ -128,7 +129,7 @@ class CoinCollector():
           #mode = 3
         #else: 
           #mode = 1
-        CollectDataNumber = CollectDataNumber + 1
+        #CollectDataNumber = CollectDataNumber + 1
       else:
         response = response0
         response1 = response0
