@@ -51,8 +51,6 @@ modeswitch = 0
 class CoinClient():
   def __init__(self):
     
-    global modeswitch  # Declare modeswitch as a global variable inside the class
-
     self.headers = {'Accepts': 'application/json', 'X-CMC_PRO_API_KEY': cak}
     
     if mode == 2:
@@ -70,6 +68,8 @@ class CoinClient():
 
   @cached(cache)
   def tickers(self):
+    global modeswitch  # Declare modeswitch as a global variable inside the class
+    
     log.info('Fetching data from the API #Modeswitch: ' + str(modeswitch))
     if mode == 3: #Wechseln der Abfragen
       log.info('Fetching data from the API #Modeswitch: ' + str(modeswitch))
