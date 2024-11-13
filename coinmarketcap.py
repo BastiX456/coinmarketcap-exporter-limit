@@ -71,9 +71,10 @@ class CoinClient():
       #self.parameters = {'start': '1', 'limit': '1600', 'convert': currency} #14.04.2024
 
   @cached(cache)
-  def tickers(self, CollectDataNumber):
+  def tickers(self):
     global modeswitch  # Declare modeswitch as a global variable inside the class
-        
+    global CollectDataNumber
+    
     #log.info('Fetching data from the API #Modeswitch: ' + str(modeswitch))
     if mode_auto == 1: #Wechseln der Abfragen
       log.info('Fetching data from the API #Modeswitch: ' + str(modeswitch))
@@ -97,7 +98,7 @@ class CoinClient():
     if 'data' not in data:
       log.error('No data in response. Is your API key set?')
       log.info(data)
-    return CollectDataNumber, data
+    return data
 
 class CoinCollector():
   def __init__(self):
@@ -134,10 +135,10 @@ class CoinCollector():
         CollectDataNumber = 1
       # query the api
       if CollectDataNumber == 1:
-        CollectDataNumber, response0 = self.client.tickers(CollectDataNumber)
+        response0 = self.client.tickers()
       elif CollectDataNumber == 2: 
         #response1 = self.client.tickers()
-        CollectDataNumber, response1 = self.client.tickers(CollectDataNumber)
+        response1 = self.client.tickers()
         
       metric = Metric('coin_market', 'coinmarketcap metric values', 'gauge')
 
