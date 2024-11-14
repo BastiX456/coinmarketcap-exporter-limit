@@ -52,6 +52,7 @@ MetricCnt = 0
 MetricTrue = 0
 response0 = 0
 response1 = 0
+metric_old = none
 
 
 class CoinClient():
@@ -116,6 +117,7 @@ class CoinCollector():
     global CollectDataNumber
     global MetricTrue
     global MetricCnt
+    global metric_old
     
     with lock:
             
