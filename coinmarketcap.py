@@ -48,6 +48,7 @@ if mode_auto == 1:
 cache = TTLCache(maxsize=cache_max_size, ttl=cache_ttl)
 modeswitch = 0
 CollectDataNumber = 0
+MetricCnt = 0
 MetricTrue = 0
 response0 = 0
 response1 = 0
@@ -112,6 +113,7 @@ class CoinCollector():
     global response1   # Declare modes as a global variable inside the class   
     global CollectDataNumber
     global MetricTrue
+    global MetricCnt
     
     with lock:
             
@@ -125,6 +127,8 @@ class CoinCollector():
         log.info('MODE_AUTO: ' + str(mode_auto))
         log.info('modeswitch: ' + str(modeswitch))
         log.info('CollectDataNumber: ' + str(CollectDataNumber))
+        log.info('MetricTrue: ' + str(MetricTrue))
+        
       
       log.info('Check Data...') if debug == 3 else None
       
@@ -144,36 +148,46 @@ class CoinCollector():
       metric = Metric('coin_market', 'coinmarketcap metric values', 'gauge')
 
       if CollectDataNumber == 3:
-        log.info('CollectDataNumber: 2 Check')
+        MetricCnt = 2
+        CollectDataNumber = 0
+      elif MetricTrue == 1:
+        MetricCnt = 2  
+      
+      if MetricCnt == 2:
+        if CollectDataNumber == 0:
+            log.info('Metric Check NEW...')
+        else:
+            log.info('Metric Check OLD...')
+          
         if isinstance(response0, int) or 'data' not in response0:
           log.error('No data in response0. Is your API key set?')
-          CollectDataNumber = 0
+          MetricCnt = 0
         elif isinstance(response1, int) or 'data' not in response1:
           log.error('No data in response1. Is your API key set?')
-          CollectDataNumber = 0
+          MetricCnt = 0
         else:
-          CollectDataNumber = 2
+          MetricCnt = 2
           MetricTrue = 1
-          while CollectDataNumber > 0:
+          while MetricCnt > 0:
 
             if mode_auto == 1: #Wechseln der Abfragen
-              if CollectDataNumber == 2:
+              if MetricCnt == 2:
                 mode = 1
                 response = response0
-              elif CollectDataNumber == 1: 
+              elif MetricCnt == 1: 
                 mode = 3
                 response = response1
             else:
               response = response1   
 
             if debug == 2:
-              if CollectDataNumber == 2:
+              if MetricCnt == 2:
                 log.info('Response0: ' + str(response0))
                 log.info('Response1: ' + str(response1))
                 
-            CollectDataNumber = CollectDataNumber - 1
+            MetricCnt = MetricCnt - 1
             if mode_auto == 0:
-              CollectDataNumber = 0
+              MetricCnt = 0
               
             log.info('collecting... in Mode:' + str(mode))  if debug == 1 else None
             #log.info('modeF: ' + str(mode))
@@ -246,9 +260,7 @@ class CoinCollector():
                     if value['quote'][price][that] is not None:
                       metric.add_sample(coinmarketmetric, value=float(value['quote'][price][that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})  
           
-          #yield metric
-      if MetricTrue == 1:
-        yield metric
+          yield metric
 
 if __name__ == '__main__':
   try:
