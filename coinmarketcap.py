@@ -111,10 +111,10 @@ class CoinCollector():
   def collect(self):
     global mode        # Declare modes as a global variable inside the class
     global response    # Declare modes as a global variable inside the class
-    global response0   # Declare modes as a global variable inside the class
-    global response1   # Declare modes as a global variable inside the class   
-    global response0_temp   # Declare modes as a global variable inside the class
-    global response1_temp   # Declare modes as a global variable inside the class  
+    global response0 = None    # Declare modes as a global variable inside the class
+    global response1 = None    # Declare modes as a global variable inside the class   
+    global response0_temp = None   # Declare modes as a global variable inside the class
+    global response1_temp = None    # Declare modes as a global variable inside the class  
     global CollectDataNumber
     global MetricTrue
     global MetricCnt
@@ -154,10 +154,13 @@ class CoinCollector():
       metric = Metric('coin_market', 'coinmarketcap metric values', 'gauge')
 
       if CollectDataNumber == 3:
-        response0 = response0_temp
-        response1 = response1_temp
         if mode_auto != 1: #Wechseln der Abfragen
           response0 = response1_temp  
+          response1 = response1_temp
+        else:
+          response0 = response0_temp
+          response1 = response1_temp
+          
         MetricCnt = 2
         CollectDataNumber = 0
       elif MetricTrue == 1:
