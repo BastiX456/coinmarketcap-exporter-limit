@@ -152,7 +152,7 @@ class CoinCollector():
           CollectDataNumber = 2
           while CollectDataNumber > 0:
 
-            if mode_auto != 1: #Wechseln der Abfragen
+            if mode_auto == 1: #Wechseln der Abfragen
               if CollectDataNumber == 2:
                 mode = 1
                 response = response0
