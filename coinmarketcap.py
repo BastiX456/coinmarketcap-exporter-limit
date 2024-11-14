@@ -111,6 +111,8 @@ class CoinCollector():
     global response    # Declare modes as a global variable inside the class
     global response0   # Declare modes as a global variable inside the class
     global response1   # Declare modes as a global variable inside the class   
+    global response0_temp   # Declare modes as a global variable inside the class
+    global response1_temp   # Declare modes as a global variable inside the class  
     global CollectDataNumber
     global MetricTrue
     global MetricCnt
@@ -140,14 +142,16 @@ class CoinCollector():
         CollectDataNumber = 1
       # query the api
       if CollectDataNumber == 1:
-        response0 = self.client.tickers()
+        response0_temp = self.client.tickers()
       elif CollectDataNumber == 2: 
         #response1 = self.client.tickers()
-        response1 = self.client.tickers()
+        response1_temp = self.client.tickers()
         
       metric = Metric('coin_market', 'coinmarketcap metric values', 'gauge')
 
       if CollectDataNumber == 3:
+        response0 = response0_temp
+        response1 = response1_temp
         MetricCnt = 2
         CollectDataNumber = 0
       elif MetricTrue == 1:
@@ -193,16 +197,16 @@ class CoinCollector():
             #log.info('modeF: ' + str(mode))
             #Neuer Code für individuelle Abfragen + Status
             if mode == 3: 
-              for key, value in response['status'].items(): #Alle Status Infos loggen!
-                log.info('Mode3#1: ' + str(value)) if debug == 1 else None
-                log.info('Mode3#2: ' + str(key)) if debug == 1 else None
-                coinmarketmetric = '_'.join(['coin_market', key])
-                
-                if key not in response['status']:
-                    continue
-                metric.add_sample(coinmarketmetric, value=float(0), labels={str(key): str(value)})
-
               try:
+                for key, value in response['status'].items(): #Alle Status Infos loggen!
+                  log.info('Mode3#1: ' + str(value)) if debug == 1 else None
+                  log.info('Mode3#2: ' + str(key)) if debug == 1 else None
+                  coinmarketmetric = '_'.join(['coin_market', key])
+                  
+                  if key not in response['status']:
+                      continue
+                  metric.add_sample(coinmarketmetric, value=float(0), labels={str(key): str(value)})
+  
                 for value in response['data'].values():
                   log.info('Mode3#3: ' + str(value)) if debug == 1 else None
                   for that in ['Check']: # z.B. BTC oder ETC
@@ -237,29 +241,32 @@ class CoinCollector():
         
             #alter Code für Standard abfragen
             else:
-              for key, value in response['status'].items(): #Alle Status Infos loggen!
-                log.info('Mode1#1: ' + str(value)) if debug == 1 else None
-                log.info('Mode1#2: ' + str(key)) if debug == 1 else None
-                coinmarketmetric = '_'.join(['coin_market', key])
-              
-                if key not in response['status']:
-                    continue
-                metric.add_sample(coinmarketmetric, value=float(0), labels={str(key): str(value)})
-              
-              for value in response['data']:  #jeder Hauptdatensatz. (BTC, ETH, ...)
-                log.info('Mode1#3: ' + str(value)) if debug == 1 else None
-                for that in ['cmc_rank', 'total_supply', 'max_supply', 'circulating_supply']: # z.B. cmc_rank in BTC = 1
-                  coinmarketmetric = '_'.join(['coin_market', that])
-                  if value[that] is not None:
-                    metric.add_sample(coinmarketmetric, value=float(value[that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
-                for price in [currency]: # z.B. "price" im Ersten BTC Datensatz in z.B. USD[]
-                  for that in ['price', 'volume_24h', 'volume_change_24h', 'market_cap', 'percent_change_1h', 'percent_change_24h', 'percent_change_7d', 'percent_change_30d', 'percent_change_60d', 'percent_change_90d', 'market_cap_dominance', 'fully_diluted_market_cap']:
-                    coinmarketmetric = '_'.join(['coin_market', that, price]).lower()
-                    if value['quote'][price] is None:
+              try:
+                for key, value in response['status'].items(): #Alle Status Infos loggen!
+                  log.info('Mode1#1: ' + str(value)) if debug == 1 else None
+                  log.info('Mode1#2: ' + str(key)) if debug == 1 else None
+                  coinmarketmetric = '_'.join(['coin_market', key])
+                
+                  if key not in response['status']:
                       continue
-                    if value['quote'][price][that] is not None:
-                      metric.add_sample(coinmarketmetric, value=float(value['quote'][price][that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})  
-          
+                  metric.add_sample(coinmarketmetric, value=float(0), labels={str(key): str(value)})
+                
+                for value in response['data']:  #jeder Hauptdatensatz. (BTC, ETH, ...)
+                  log.info('Mode1#3: ' + str(value)) if debug == 1 else None
+                  for that in ['cmc_rank', 'total_supply', 'max_supply', 'circulating_supply']: # z.B. cmc_rank in BTC = 1
+                    coinmarketmetric = '_'.join(['coin_market', that])
+                    if value[that] is not None:
+                      metric.add_sample(coinmarketmetric, value=float(value[that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
+                  for price in [currency]: # z.B. "price" im Ersten BTC Datensatz in z.B. USD[]
+                    for that in ['price', 'volume_24h', 'volume_change_24h', 'market_cap', 'percent_change_1h', 'percent_change_24h', 'percent_change_7d', 'percent_change_30d', 'percent_change_60d', 'percent_change_90d', 'market_cap_dominance', 'fully_diluted_market_cap']:
+                      coinmarketmetric = '_'.join(['coin_market', that, price]).lower()
+                      if value['quote'][price] is None:
+                        continue
+                      if value['quote'][price][that] is not None:
+                        metric.add_sample(coinmarketmetric, value=float(value['quote'][price][that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})  
+              except AttributeError as e:
+                log.error('ErrorsProcessResponse0: ' + str(e))  
+                
           yield metric
 
 if __name__ == '__main__':
