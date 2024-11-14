@@ -41,8 +41,7 @@ debug = int(os.environ.get('DEBUG', 0)) #10.11.2024
 mode = int(os.environ.get('MODE', 1)) #10.11.2024
 mode_auto = int(os.environ.get('MODE_AUTO', 0)) #10.11.2024
 symbol = os.environ.get('SYMBOL', 'BTC') #10.11.2024
-id = os.environ.get('ID', '1') #10.11.2024
-#symbol2 = os.environ.get('SYMBOL2', 'BTC') #10.11.2024
+
 if mode_auto == 1:
   cache_ttl = cache_ttl/2
   
@@ -68,7 +67,7 @@ class CoinClient():
       self.parameters = {'symbol': symbol,'convert': currency} #10.11.2024
     elif mode == 3:
       self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
-      self.parameters = {'id': id, 'convert': currency} #10.11.2024
+      self.parameters = {'symbol': symbol,'convert': currency} #10.11.2024
     else:
       self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
       self.parameters = {'start': '1', 'limit': limit_max, 'convert': currency} #10.11.2024
@@ -91,7 +90,7 @@ class CoinClient():
       else: 
         modeswitch = 0 
         self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
-        self.parameters = {'id': id, 'convert': currency} #10.11.2024
+        self.parameters = {'symbol': symbol,'convert': currency} #10.11.2024
     else:
       log.info('Fetching data from the API #Modeswitch: OFF')
     
@@ -131,7 +130,6 @@ class CoinCollector():
         log.info('LIMIT_MAX: ' + str(limit_max))
         log.info('MODE: ' + str(mode))
         log.info('SYMBOL: ' + symbol)
-        log.info('ID: ' + id)
         log.info('MODE_AUTO: ' + str(mode_auto))
         log.info('modeswitch: ' + str(modeswitch))
         log.info('CollectDataNumber: ' + str(CollectDataNumber))
