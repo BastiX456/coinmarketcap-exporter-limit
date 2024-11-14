@@ -63,10 +63,10 @@ class CoinClient():
     
     if mode == 2:
       self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
-      self.parameters = {'symbol': symbol, 'id': id, 'convert': currency} #10.11.2024
+      self.parameters = {'symbol': symbol,'convert': currency} #10.11.2024
     elif mode == 3:
       self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
-      self.parameters = {'symbol': symbol, 'id': id, 'convert': currency} #10.11.2024
+      self.parameters = {'id': id, 'convert': currency} #10.11.2024
     else:
       self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
       self.parameters = {'start': '1', 'limit': limit_max, 'convert': currency} #10.11.2024
@@ -89,7 +89,7 @@ class CoinClient():
       else: 
         modeswitch = 0 
         self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
-        self.parameters = {'symbol': symbol, 'id': id, 'convert': currency} #10.11.2024
+        self.parameters = {'id': id, 'convert': currency} #10.11.2024
 
       CollectDataNumber = CollectDataNumber + 1
     else:
