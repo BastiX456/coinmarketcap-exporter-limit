@@ -282,7 +282,7 @@ if __name__ == '__main__':
     start_http_server(int(args.port), addr=args.addr)
 
     while True:
-      time.sleep(10)
+      time.sleep(14)
   except KeyboardInterrupt:
     print(" Interrupted")
     exit(0)
