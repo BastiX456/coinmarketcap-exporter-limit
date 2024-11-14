@@ -127,8 +127,6 @@ class CoinCollector():
       
       #Modus prüfen
       if mode_auto != 1: #Wechseln der Abfragen
-        response = response0
-        response1 = response0
         CollectDataNumber = 2 
 
       if CollectDataNumber == 0:
@@ -149,17 +147,20 @@ class CoinCollector():
           CollectDataNumber = 0
         elif isinstance(response1, int) or 'data' not in response1:
           log.error('No data in response1. Is your API key set?')
-          CollectDataNumber = 2
+          CollectDataNumber = 0
         else:
-          
+          CollectDataNumber = 2
           while CollectDataNumber > 0:
 
-            if CollectDataNumber == 2:
-              mode = 1
-              response = response0
-            elif CollectDataNumber == 1: 
-              mode = 3
-              response = response1
+            if mode_auto != 1: #Wechseln der Abfragen
+              if CollectDataNumber == 2:
+                mode = 1
+                response = response0
+              elif CollectDataNumber == 1: 
+                mode = 3
+                response = response1
+            else:
+              response = response1   
           
             CollectDataNumber = CollectDataNumber - 1
             if mode_auto == 0:
@@ -168,14 +169,14 @@ class CoinCollector():
             if debug == 2:
               log.info('Response0: ' + str(response0))
               log.info('Response1: ' + str(response1))
-              
-            log.info('collecting... in Mode:' + str(mode))    
+
+            log.info('collecting... in Mode:' + str(mode))  if debug == 1 else None
             #log.info('modeF: ' + str(mode))
             #Neuer Code für individuelle Abfragen + Status
             if mode == 3: 
               for key, value in response['status'].items(): #Alle Status Infos loggen!
-                #log.info('Test1: ' + str(value))
-                #log.info('Test2: ' + str(key))
+                log.info('Mode3#1: ' + str(value)) if debug == 1 else None
+                log.info('Mode3#2: ' + str(key)) if debug == 1 else None
                 coinmarketmetric = '_'.join(['coin_market', key])
                 
                 if key not in response['status']:
@@ -184,14 +185,14 @@ class CoinCollector():
 
               try:
                 for value in response['data'].values():
-                  #log.info('Test1: ' + str(value))
+                  log.info('Mode3#3: ' + str(value)) if debug == 1 else None
                   for that in ['Check']: # z.B. BTC oder ETC
-                      #log.info('Test2: ' + str(that)) ########## = BTC     
+                      log.info('Mode3#4: ' + str(that)) if debug == 1 else None 
                       for that in ['cmc_rank', 'total_supply', 'max_supply', 'circulating_supply']:
-                        #log.info('Test10:' + str(that)) ##########
+                        log.info('Mode3#5:' + str(that)) if debug == 1 else None
                         coinmarketmetric = '_'.join(['coin_market', that])
                         if value[that] is not None:
-                          #log.info('Test11:' + str(that)) ##########
+                          log.info('Mode3#6:' + str(that)) if debug == 1 else None
                           metric.add_sample(coinmarketmetric, value=float(value[that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})
                       for price in [currency]:
                         for that in ['price', 'volume_24h', 'volume_change_24h', 'market_cap', 'percent_change_1h', 'percent_change_24h', 'percent_change_7d', 'percent_change_30d', 'percent_change_60d', 'percent_change_90d', 'market_cap_dominance', 'fully_diluted_market_cap']:
@@ -206,8 +207,8 @@ class CoinCollector():
             elif mode == 2:
     
               for key, value in response['status'].items():
-                #log.info('Test1: ' + str(value))
-                #log.info('Test2: ' + str(key))
+                log.info('Mode2#1: ' + str(value)) if debug == 1 else None
+                log.info('Mode2#2: ' + str(key)) if debug == 1 else None
                 coinmarketmetric = '_'.join(['coin_market', key])
                 
                 if key not in response['status']:
@@ -218,8 +219,8 @@ class CoinCollector():
             #alter Code für Standard abfragen
             else:
               for key, value in response['status'].items(): #Alle Status Infos loggen!
-                #log.info('Test1: ' + str(value))
-                #log.info('Test2: ' + str(key))
+                log.info('Mode1#1: ' + str(value)) if debug == 1 else None
+                log.info('Mode1#2: ' + str(key)) if debug == 1 else None
                 coinmarketmetric = '_'.join(['coin_market', key])
               
                 if key not in response['status']:
@@ -227,7 +228,7 @@ class CoinCollector():
                 metric.add_sample(coinmarketmetric, value=float(0), labels={str(key): str(value)})
               
               for value in response['data']:  #jeder Hauptdatensatz. (BTC, ETH, ...)
-                #log.info('Test9: ' + str(value))
+                log.info('Mode1#3: ' + str(value)) if debug == 1 else None
                 for that in ['cmc_rank', 'total_supply', 'max_supply', 'circulating_supply']: # z.B. cmc_rank in BTC = 1
                   coinmarketmetric = '_'.join(['coin_market', that])
                   if value[that] is not None:
