@@ -53,6 +53,8 @@ MetricCnt = 0
 MetricTrue = 0
 response0 = 0
 response1 = 0
+response0_temp = 0
+response1_temp = 0
 metric_old = None
 
 
@@ -111,10 +113,10 @@ class CoinCollector():
   def collect(self):
     global mode        # Declare modes as a global variable inside the class
     global response    # Declare modes as a global variable inside the class
-    global response0 = None    # Declare modes as a global variable inside the class
-    global response1 = None    # Declare modes as a global variable inside the class   
-    global response0_temp = None   # Declare modes as a global variable inside the class
-    global response1_temp = None    # Declare modes as a global variable inside the class  
+    global response0     # Declare modes as a global variable inside the class
+    global response1    # Declare modes as a global variable inside the class   
+    global response0_temp    # Declare modes as a global variable inside the class
+    global response1_temp    # Declare modes as a global variable inside the class  
     global CollectDataNumber
     global MetricTrue
     global MetricCnt
