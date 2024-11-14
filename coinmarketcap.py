@@ -52,7 +52,7 @@ MetricCnt = 0
 MetricTrue = 0
 response0 = 0
 response1 = 0
-metric_old = none
+metric_old = None
 
 
 class CoinClient():
