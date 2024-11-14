@@ -48,6 +48,7 @@ if mode_auto == 1:
 cache = TTLCache(maxsize=cache_max_size, ttl=cache_ttl)
 modeswitch = 0
 CollectDataNumber = 0
+MetricTrue = 0
 response0 = 0
 response1 = 0
 
@@ -110,6 +111,7 @@ class CoinCollector():
     global response0   # Declare modes as a global variable inside the class
     global response1   # Declare modes as a global variable inside the class   
     global CollectDataNumber
+    global MetricTrue
     
     with lock:
             
@@ -124,6 +126,7 @@ class CoinCollector():
         log.info('modeswitch: ' + str(modeswitch))
         log.info('CollectDataNumber: ' + str(CollectDataNumber))
       
+      log.info('Check Data...') if debug == 3 else None
       
       #Modus prüfen
       if mode_auto != 1: #Wechseln der Abfragen
@@ -150,6 +153,7 @@ class CoinCollector():
           CollectDataNumber = 0
         else:
           CollectDataNumber = 2
+          MetricTrue = 1
           while CollectDataNumber > 0:
 
             if mode_auto == 1: #Wechseln der Abfragen
@@ -161,15 +165,16 @@ class CoinCollector():
                 response = response1
             else:
               response = response1   
-          
+
+            if debug == 2:
+              if CollectDataNumber == 2:
+                log.info('Response0: ' + str(response0))
+                log.info('Response1: ' + str(response1))
+                
             CollectDataNumber = CollectDataNumber - 1
             if mode_auto == 0:
               CollectDataNumber = 0
               
-            if debug == 2:
-              log.info('Response0: ' + str(response0))
-              log.info('Response1: ' + str(response1))
-
             log.info('collecting... in Mode:' + str(mode))  if debug == 1 else None
             #log.info('modeF: ' + str(mode))
             #Neuer Code für individuelle Abfragen + Status
@@ -241,7 +246,9 @@ class CoinCollector():
                     if value['quote'][price][that] is not None:
                       metric.add_sample(coinmarketmetric, value=float(value['quote'][price][that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})  
           
-          yield metric
+          #yield metric
+      if MetricTrue == 1:
+        yield metric
 
 if __name__ == '__main__':
   try:
