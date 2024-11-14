@@ -156,10 +156,10 @@ class CoinCollector():
 
             if CollectDataNumber == 2:
               mode = 1
-              response = response1
+              response = response0
             elif CollectDataNumber == 1: 
               mode = 3
-              response = response0
+              response = response1
           
             CollectDataNumber = CollectDataNumber - 1
             if mode_auto == 0:
