@@ -155,7 +155,9 @@ class CoinCollector():
         MetricCnt = 2
         CollectDataNumber = 0
       elif MetricTrue == 1:
-        MetricCnt = 2  
+        #MetricCnt = 2 
+        log.info('Metric Send OLD...')
+        yield metric_old
       
       if MetricCnt == 2:
         if CollectDataNumber == 0:
@@ -266,7 +268,8 @@ class CoinCollector():
                         metric.add_sample(coinmarketmetric, value=float(value['quote'][price][that]), labels={'id': value['slug'], 'name': value['name'], 'symbol': value['symbol']})  
               except AttributeError as e:
                 log.error('ErrorsProcessResponse0: ' + str(e))  
-                
+
+          metric_old = metric
           yield metric
 
 if __name__ == '__main__':
