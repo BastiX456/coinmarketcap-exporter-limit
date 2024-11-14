@@ -90,10 +90,10 @@ class CoinClient():
         modeswitch = 0 
         self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
         self.parameters = {'id': id, 'convert': currency} #10.11.2024
-
-      CollectDataNumber = CollectDataNumber + 1
     else:
       log.info('Fetching data from the API #Modeswitch: OFF')
+    
+    CollectDataNumber = CollectDataNumber + 1
       
     session = Session()
     session.headers.update(self.headers)
@@ -129,6 +129,7 @@ class CoinCollector():
         log.info('LIMIT_MAX: ' + str(limit_max))
         log.info('MODE: ' + str(mode))
         log.info('SYMBOL: ' + symbol)
+        log.info('ID: ' + id)
         log.info('MODE_AUTO: ' + str(mode_auto))
         log.info('modeswitch: ' + str(modeswitch))
         log.info('CollectDataNumber: ' + str(CollectDataNumber))
