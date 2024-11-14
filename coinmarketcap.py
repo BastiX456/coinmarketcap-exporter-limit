@@ -41,6 +41,7 @@ debug = int(os.environ.get('DEBUG', 0)) #10.11.2024
 mode = int(os.environ.get('MODE', 1)) #10.11.2024
 mode_auto = int(os.environ.get('MODE_AUTO', 0)) #10.11.2024
 symbol = os.environ.get('SYMBOL', 'BTC') #10.11.2024
+id = os.environ.get('ID', '1') #10.11.2024
 #symbol2 = os.environ.get('SYMBOL2', 'BTC') #10.11.2024
 if mode_auto == 1:
   cache_ttl = cache_ttl/2
@@ -62,10 +63,10 @@ class CoinClient():
     
     if mode == 2:
       self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
-      self.parameters = {'symbol': symbol, 'convert': currency} #10.11.2024
+      self.parameters = {'symbol': symbol, 'id': id, 'convert': currency} #10.11.2024
     elif mode == 3:
       self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
-      self.parameters = {'symbol': symbol, 'convert': currency} #10.11.2024
+      self.parameters = {'symbol': symbol, 'id': id, 'convert': currency} #10.11.2024
     else:
       self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
       self.parameters = {'start': '1', 'limit': limit_max, 'convert': currency} #10.11.2024
@@ -88,7 +89,7 @@ class CoinClient():
       else: 
         modeswitch = 0 
         self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
-        self.parameters = {'symbol': symbol, 'convert': currency} #10.11.2024
+        self.parameters = {'symbol': symbol, 'id': id, 'convert': currency} #10.11.2024
 
       CollectDataNumber = CollectDataNumber + 1
     else:
@@ -154,6 +155,8 @@ class CoinCollector():
       if CollectDataNumber == 3:
         response0 = response0_temp
         response1 = response1_temp
+        if mode_auto != 1: #Wechseln der Abfragen
+          response0 = response1_temp  
         MetricCnt = 2
         CollectDataNumber = 0
       elif MetricTrue == 1:
